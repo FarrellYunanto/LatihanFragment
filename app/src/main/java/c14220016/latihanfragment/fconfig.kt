@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +37,26 @@ class fconfig : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_fconfig, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val mFragmentManager = parentFragmentManager
+        mFragmentManager.findFragmentByTag(fgame::class.java.simpleName)
+        val mBundle = Bundle()
+        val configVal = view.findViewById<EditText>(R.id.configVal)
+        val _buttonToScore = view.findViewById<Button>(R.id.configSave)
+        _buttonToScore.setOnClickListener {
+            val mfGame = fgame()
+            mBundle.putString("CONFIG", configVal.text.toString())
+            mfGame.arguments = mBundle
+            mFragmentManager.beginTransaction().apply {
+                replace(R.id.mainframe, mfGame, fgame::class.java.simpleName)
+                addToBackStack(null)
+                commit()
+            }
+        }
     }
 
     companion object {

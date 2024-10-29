@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.constraintlayout.motion.widget.Debug
 import java.sql.Array
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,8 +43,26 @@ class fgame : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var prevalue = "";
-        val numbers = arrayOf(1,1,2,2,3,3,4,4,5,5).toMutableList()
+
+//        Variable buat game
+        var prevalue = ""
+        var tries = 0
+        var numbers = mutableListOf<Int>()
+        if (arguments != null){
+            val txtHasil = arguments?.getString("CONFIG")?.toInt()
+            val sampai = txtHasil?.plus(5)
+            if (txtHasil != null) {
+                for (i in txtHasil until sampai!!){
+                    numbers.add(i)
+                    numbers.add(i)
+                }
+            }
+
+        } else {
+            numbers = arrayOf(1,1,2,2,3,3,4,4,5,5).toMutableList()
+        }
+
+        val score = view.findViewById<TextView>(R.id.gameScore)
         val buttons = arrayOf(
             view.findViewById<Button>(R.id.guessB1),
             view.findViewById<Button>(R.id.guessB2),
@@ -57,8 +76,12 @@ class fgame : Fragment() {
             view.findViewById<Button>(R.id.guessB10),
         )
 
-        val score = view.findViewById<TextView>(R.id.gameScore)
+//        Variable buat button to score
+        val mFragmentManager = parentFragmentManager
+        mFragmentManager.findFragmentByTag(fscore::class.java.simpleName)
+        val mBundle = Bundle()
 
+//        Nambahin onclick ke tiap button
         for (button in buttons){
             button.setOnClickListener {
                 button.text = numbers.removeAt(numbers.indices.random()).toString()
@@ -74,8 +97,37 @@ class fgame : Fragment() {
                 } else {
                     prevalue = button.text.toString()
                 }
+
+                button.isEnabled = false
+
+                tries += 1
+
+                if (tries == 10){
+                    val mfScore = fscore()
+                    mBundle.putString("SCORE", score.text.toString())
+                    mfScore.arguments = mBundle
+                    mFragmentManager.beginTransaction().apply {
+                        replace(R.id.mainframe, mfScore, fscore::class.java.simpleName)
+                        addToBackStack(null)
+                        commit()
+                    }
+                }
             }
         }
+
+//        button give up
+        val _buttonToScore = view.findViewById<Button>(R.id.btnGiveUp)
+        _buttonToScore.setOnClickListener {
+            val mfScore = fscore()
+            mBundle.putString("SCORE", score.text.toString())
+            mfScore.arguments = mBundle
+            mFragmentManager.beginTransaction().apply {
+                replace(R.id.mainframe, mfScore, fscore::class.java.simpleName)
+                addToBackStack(null)
+                commit()
+            }
+        }
+
     }
 
     companion object {

@@ -10,10 +10,26 @@
 
 
     <TextView
+        android:textSize="30sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="INI CONFIG FRAGMENT"
+        android:text="CONFIG FRAGMENT"
         android:textColor="@color/white"
         android:layout_gravity="center"/>
+
+    <EditText
+        android:id="@+id/configVal"
+        android:backgroundTint="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="input minimum number"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"/>
+
+    <Button
+        android:id="@+id/configSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="save"/>
 
 </LinearLayout>

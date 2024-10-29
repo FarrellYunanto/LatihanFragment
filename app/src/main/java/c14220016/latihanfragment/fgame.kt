@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import java.sql.Array
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +38,44 @@ class fgame : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_fgame, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var prevalue = "";
+        val numbers = arrayOf(1,1,2,2,3,3,4,4,5,5).toMutableList()
+        val buttons = arrayOf(
+            view.findViewById<Button>(R.id.guessB1),
+            view.findViewById<Button>(R.id.guessB2),
+            view.findViewById<Button>(R.id.guessB3),
+            view.findViewById<Button>(R.id.guessB4),
+            view.findViewById<Button>(R.id.guessB5),
+            view.findViewById<Button>(R.id.guessB6),
+            view.findViewById<Button>(R.id.guessB7),
+            view.findViewById<Button>(R.id.guessB8),
+            view.findViewById<Button>(R.id.guessB9),
+            view.findViewById<Button>(R.id.guessB10),
+        )
+
+        val score = view.findViewById<TextView>(R.id.gameScore)
+
+        for (button in buttons){
+            button.setOnClickListener {
+                button.text = numbers.removeAt(numbers.indices.random()).toString()
+
+                if (prevalue != ""){
+                    if (prevalue == button.text.toString()){
+                        score.text = (score.text.toString().toInt() + 10).toString()
+                        prevalue = ""
+                    } else {
+                        score.text = (score.text.toString().toInt() - 5).toString()
+                        prevalue = ""
+                    }
+                } else {
+                    prevalue = button.text.toString()
+                }
+            }
+        }
     }
 
     companion object {
